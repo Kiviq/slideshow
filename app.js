@@ -4,44 +4,90 @@ function start(){
 		resultBox:document.querySelector('.uploaded'),
 		files:{
 			currentArray:[],
+			baseArray:[],
+			count:0,
 			modelElement:document.querySelector('.result'),
 		},
 		init: function(){
-			console.log(this.handler)
-			this.watchChange();
+			if (window.File && window.FileReader && window.FileList && window.Blob) {
+			  console.log('Great success!')
+			  	console.log(this.handler)
+				this.watchChange();
+				this.resultBox.addEventListener('dragover', (e)=>{
+					e.stopPropagation();
+				    e.preventDefault();
+				    e.dataTransfer.dropEffect = 'copy';
+				})
+				this.resultBox.addEventListener('drop', (e)=>{
+					e.stopPropagation();
+					e.preventDefault();
+						var files = e.dataTransfer.files;
+						if (files.length  >= 1){
+							console.log(e.dataTransfer.files)
+							Array.from(e.dataTransfer.files).map((el, ind)=>{
+								this.files.currentArray.push(el);
+							})
+							this.resultBox.innerHTML = ''
+							this.renderUploaded();
+						}
+				})
+			} else {
+			  alert('The File APIs are not fully supported in this browser.');
+			}
+			
 		},
 		watchChange:function(){
 			this.handler.addEventListener('change', (e)=>{
 				this.resultBox.innerHTML = '';
-				this.files.currentArray = Array.from(e.target.files);
+				Array.from(e.target.files).forEach((el, ind)=>{
+					this.files.currentArray.push(el);
+				})
 				this.renderUploaded();
 			})
 		}, 
 		renderUploaded:function(){
-			var elementsArray = [];
-			console.log(this.files.currentArray, 'render')
+			//Renders uploaded files
+			this.files.count = 0;
 			this.files.currentArray.map((el,ind)=>{
-				var resultElement = this.files.modelElement.cloneNode(true);
-				resultElement.classList.add('result-'+(ind+1));
-				resultElement.querySelector('.result-name').textContent = el.name;
-				resultElement.querySelector('.result-weight').textContent = Math.floor(el.size/1000) + 'kb';
-				resultElement.querySelector('.result-position').textContent = ind + 1;
-				elementsArray.push(resultElement);
-				this.resultBox.append(resultElement);
-				if (ind == this.files.currentArray.length - 1){
-					console.log('last')
-					this.changeOrder();
+				var reader = new FileReader(); // window blob to read base64
+				reader.onload = (function(file) {
+			        return function(e) {
+			        	console.log(uploadFile.files.baseArray, 'basearr')
+					// Add data to array (to show them later)
+					var dataElement = [file.name, e.target.result, file.size];
+					uploadFile.files.baseArray.push(dataElement)
+					uploadFile.files.count++
+					//Creating element from uploaded file
+					var resultElement = uploadFile.files.modelElement.cloneNode(true);
+					resultElement.classList.add('result-'+uploadFile.files.count);
+					resultElement.classList.remove('dummy')
+					resultElement.querySelector('.result-name').textContent = file.name;
+					resultElement.querySelector('.result-weight').textContent = Math.floor(file.size/1000) + 'kb';
+					resultElement.querySelector('.result-position').textContent = uploadFile.files.count;
+					uploadFile.resultBox.append(resultElement);
+					
+					// Fires functions after all elements
 
-				}
+					if (ind == uploadFile.files.currentArray.length - 1){
+						console.log('last')
+						uploadFile.changeOrder();
+						console.log(uploadFile.files.baseArray)
+					}
+			        };
+		      	})(el);
+		      	reader.readAsDataURL(el);
+				
 			})
 		},
 		changeOrder: function(){
+			//Change order prototype (NF)
 			var results = [].slice.call(this.resultBox.querySelectorAll('.result'));
 			console.log(results);
 			var dimsObj = this.setDims(results);
 			console.log(dimsObj)
 			this.resultBox.addEventListener('drag', (e)=>{
 				console.log(e.target, e.target.classList)
+				e.dataTransfer.changeOrder = true;
 				// var dragIndex = e.target.classList
 				if (results.indexOf(e.target) > -1){
 					if (e.clientY > dimsObj.box_rect.top && e.clientY < (dimsObj.box_rect.top + dimsObj.box_rect.height)){
@@ -68,6 +114,7 @@ function start(){
 			}
 		},
 		setDims: function(resultsArray){
+			//sets dimensions for resultBox after appending all children and dimensions of the result
 			var box_rect = this.resultBox.getBoundingClientRect();
 			var dimsObj = {
 				box_rect: uploadFile.resultBox.getBoundingClientRect(),
