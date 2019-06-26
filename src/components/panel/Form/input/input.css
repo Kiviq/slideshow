@@ -1,0 +1,28 @@
+.input_cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top:18px;
+}
+.input_cont label{
+	font-family:'sen-reg';
+	font-size:14px;
+	margin-bottom:5px;
+}
+.input_cont input{
+    width: 100%;
+    min-height: 50px;
+    background: #eef0f2;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'sen-reg';
+    letter-spacing: 1px;
+    border: 1px solid transparent;
+}
+.input_cont input.error{
+    border:1px solid red;
+}

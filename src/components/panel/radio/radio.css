@@ -1,0 +1,102 @@
+.createSlides {
+    margin: 75px auto 0 auto;
+    max-width: 950px;
+    display: flex;
+    align-items: center;
+        flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.createSlides label {
+    display: inline-block;
+    width: 30%;
+    margin-right: 3%;
+    padding-left: 0;
+    font-size:14px;
+    padding-left:6px;
+    font-family: 'sen-reg';
+    position: relative;
+
+}
+.createSlides .radio_sect label:before{
+    content:"";
+    width:25px;
+    height: 25px;
+    position: absolute;
+    top:40%;
+    left: 0;
+    transform: translate(0,-50%);
+    background:url('./../../../media/radio_select/checkbox_off.svg');
+    background-size:contain;
+}
+.createSlides .radio_sect label:after{
+    content:"";
+    width:25px;
+    height: 25px;
+    position: absolute;
+    top:40%;
+    left: 0;
+    opacity: 0;
+    transform: translate(0,-50%);
+    background:url('./../../../media/radio_select/checbox_on.svg');
+    background-size:contain;
+}
+.createSlides .radio_sect label.sataku:before{
+    left:8%;
+}
+.createSlides .radio_sect label.carla:before{
+    left:12%;
+}
+.createSlides .radio_sect label.sataku:after{
+    left:8%;
+}
+.createSlides .radio_sect label.carla:after{
+    left:12%;
+}
+.createSlides .radio_sect label.checked:before{
+    opacity:0;
+}
+.createSlides .radio_sect label.checked:after{
+    opacity:1;
+}
+.createSlides .radio_sect label input{
+    opacity: 0;
+}
+.createSlides .radio_sect{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    margin: auto;
+    max-width: 710px;
+}
+.createSlides label.sataku img {
+    max-width: 104px;
+}
+
+.createSlides label.sari img {
+    max-width: 138px;
+}
+.createSlides label.carla img{
+    max-width: 132px;
+}
+.createSlides label:last-child {
+    margin-right: 0;
+    text-align: right;
+    padding-right: 20px;
+}
+.createSlides label input {
+    margin-right: 29px;
+}
+
+
+.createSlides label.sataku {
+    padding-left: 20px;
+}
+
+.createSlides label.sari input {
+    margin-right: 26px;
+}
+
+.createSlides label.carla input {
+    margin-right: 26px;
+}
